@@ -14,6 +14,9 @@ import cli_args  # isort: skip
 # add argparse arguments
 parser = argparse.ArgumentParser(description="Train an RL agent with RSL-RL.")
 parser.add_argument("--task", type=str, default=None, help="Name of the task.")
+parser.add_argument(
+    "--agent", type=str, default="rsl_rl_cfg_entry_point", help="Name of the RL agent configuration entry point."
+)
 parser.add_argument("--num_envs", type=int, default=None, help="Number of environments to simulate.")
 parser.add_argument("--seed", type=int, default=None, help="Seed used for the environment")
 parser.add_argument("--plane", action='store_true', help="Use plane terrain")
@@ -96,8 +99,9 @@ class TorchAttnEncPolicyExporter(torch.nn.Module):
             obs = torch.cat([prop_obs[:, -self.single_obs_dim:], critic_pred], dim=1) 
             embedding, *_ = self.encoder(obs, perception_obs)
         else:
-            embedding, *_ = self.encoder(prop_obs[:, -self.single_obs_dim:], perception_obs)
-        embedding = torch.cat([prop_obs, embedding], dim=-1)
+            obs = prop_obs[:, -self.single_obs_dim:]
+            embedding, *_ = self.encoder(obs, perception_obs)
+        embedding = torch.cat([obs, embedding], dim=-1)
         return self.actor(embedding)
 
     @torch.jit.export
@@ -146,8 +150,9 @@ class OnnxAttnEncPolicyExporter(torch.nn.Module):
             obs = torch.cat([prop_obs[:, -self.single_obs_dim:], critic_pred], dim=1) 
             embedding, *_ = self.encoder(obs, perception_obs)
         else:
-            embedding, *_ = self.encoder(prop_obs[:, -self.single_obs_dim:], perception_obs)
-        embedding = torch.cat([prop_obs, embedding], dim=-1)
+            obs = prop_obs[:, -self.single_obs_dim:]
+            embedding, *_ = self.encoder(obs, perception_obs)
+        embedding = torch.cat([obs, embedding], dim=-1)
         return self.actor(embedding)
 
     def export(self, path, filename):
@@ -243,7 +248,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     env = gym.make(args_cli.task, cfg=env_cfg, render_mode="rgb_array" if args_cli.video else None)
 
     if hasattr(env_cfg, 'interrupt') and env_cfg.interrupt.use_interrupt:
-        env.unwrapped.interrupt_rad_curriculum = torch.ones(env_cfg.scene.num_envs, dtype=torch.float, device=env_cfg.device, requires_grad=False)
+        env.unwrapped.interrupt_rad_curriculum = torch.ones(env_cfg.scene.num_envs, dtype=torch.float, device=env.unwrapped.device, requires_grad=False)
 
     # convert to single-agent instance if required by the RL algorithm
     if isinstance(env.unwrapped, DirectMARLEnv):
