@@ -7,13 +7,13 @@ from isaaclab.utils.buffers import CircularBuffer
 from isaaclab.utils.math import quat_apply_inverse,quat_apply_yaw, quat_inv 
 from robolab.tasks.direct.base import (  # noqa:F401
     BaseEnv,
+    BaseEnvCfg
 )
-from .atom01_attn_enc_env_cfg import ATOM01AttnEncEnvCfg
 
-class ATOM01AttnEncEnv(BaseEnv):
+class AttnEncEnv(BaseEnv):
     def __init__(self, cfg, render_mode, **kwargs):
         super().__init__(cfg, render_mode, **kwargs)
-        self.cfg: ATOM01AttnEncEnvCfg
+        self.cfg: BaseEnvCfg
 
     def compute_current_observations(self):
         robot = self.robot
@@ -98,8 +98,6 @@ class ATOM01AttnEncEnv(BaseEnv):
             height_scan = torch.clamp(height_scan - self.cfg.normalization.height_scan_offset, min=-1.0, max=1.0)
             height_scan = torch.nan_to_num(height_scan, nan=1.0, posinf=1.0, neginf=-1.0)
             height_scan *= self.obs_scales.height_scan
-            if not self.cfg.attn_enc.critic_encoder:
-                current_critic_obs = torch.cat([current_critic_obs, height_scan], dim=-1)
             if self.cfg.scene_context.height_scanner.enable_height_scan_actor:
                 height_scan_actor = height_scan.clone()
                 if self.add_noise:

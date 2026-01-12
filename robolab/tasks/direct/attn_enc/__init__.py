@@ -15,7 +15,7 @@ from . import agents
 
 gym.register(
     id="Atom01-AttnEnc",
-    entry_point=f"{__name__}.attn_enc_env:ATOM01AttnEncEnv",
+    entry_point=f"{__name__}.attn_enc_env:AttnEncEnv",
     disable_env_checker=True,
     kwargs={
         "env_cfg_entry_point": f"{__name__}.atom01_attn_enc_env_cfg:ATOM01AttnEncEnvCfg",

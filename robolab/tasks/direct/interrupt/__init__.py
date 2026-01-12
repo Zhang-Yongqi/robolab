@@ -15,7 +15,7 @@ from . import agents
 
 gym.register(
     id="Atom01-Interrupt",
-    entry_point=f"{__name__}.interrupt_env:ATOM01InterruptEnv",
+    entry_point=f"{__name__}.interrupt_env:InterruptEnv",
     disable_env_checker=True,
     kwargs={
         "env_cfg_entry_point": f"{__name__}.atom01_interrupt_env_cfg:ATOM01InterruptEnvCfg",

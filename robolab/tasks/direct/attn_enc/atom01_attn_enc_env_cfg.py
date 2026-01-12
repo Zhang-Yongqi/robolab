@@ -159,7 +159,6 @@ for i in range(10):
 class AttnEncCfg:
     use_attn_enc: bool = False
     vel_in_obs: bool = False
-    critic_encoder: bool = False
     marker_cfg = VisualizationMarkersCfg(
         prim_path="/Visuals/Attention",
         markers=markers,
@@ -173,7 +172,6 @@ class ATOM01AttnEncEnvCfg(BaseEnvCfg):
     attn_enc = AttnEncCfg(
             use_attn_enc=True,
             vel_in_obs=False,
-            critic_encoder=True,
         )
 
     def __post_init__(self):

@@ -6,14 +6,13 @@ import numpy as np
 
 from robolab.tasks.direct.base import (  # noqa:F401
     BaseEnv,
+    BaseEnvCfg
 )
 
-from .atom01_interrupt_env_cfg import ATOM01InterruptEnvCfg
-
-class ATOM01InterruptEnv(BaseEnv):
+class InterruptEnv(BaseEnv):
     def __init__(self, cfg, render_mode, **kwargs):
         super().__init__(cfg, render_mode, **kwargs)
-        self.cfg: ATOM01InterruptEnvCfg
+        self.cfg: BaseEnvCfg
 
     def init_buffers(self):
         self.extras = {}
