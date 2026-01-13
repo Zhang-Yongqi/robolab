@@ -20,5 +20,8 @@ setup(
     install_requires=[
         "mujoco==3.3.3",
         "mujoco-python-viewer",
+        "psutil",
+        "joblib>=1.2.0",
+        "pynput",
     ],
 )
