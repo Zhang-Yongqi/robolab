@@ -123,6 +123,7 @@ class RslRlOnPolicyRunnerAmpCfg(RslRlOnPolicyRunnerCfg):
     max_iterations = 5000
     save_interval = 100
     experiment_name = "atom01_amp"
+    wandb_project = "atom01_amp"
     obs_groups = {
         "policy": ["policy"], 
         "critic": ["critic"], 
