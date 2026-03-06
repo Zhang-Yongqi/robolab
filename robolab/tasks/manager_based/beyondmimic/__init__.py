@@ -56,23 +56,3 @@ gym.register(
         "rsl_rl_cfg_entry_point": f"{agents.__name__}.atom01_getup_mimic_agent_cfg:Atom01GetupMimicPPORunnerCfg",
     },
 )
-
-gym.register(
-    id="Atom02-BeyondMimic",
-    entry_point="isaaclab.envs:ManagerBasedRLEnv",
-    disable_env_checker=True,
-    kwargs={
-        "env_cfg_entry_point": f"{__name__}.atom02_beyondmimic_env_cfg:Atom02BeyondMimicEnvCfg",
-        "rsl_rl_cfg_entry_point": f"{agents.__name__}.atom02_beyondmimic_agent_cfg:Atom02BeyondMimicPPORunnerCfg",
-    },
-)
-
-gym.register(
-    id="Atom02-Fight",
-    entry_point="isaaclab.envs:ManagerBasedRLEnv",
-    disable_env_checker=True,
-    kwargs={
-        "env_cfg_entry_point": f"{__name__}.atom02_fight_env_cfg:Atom02FightEnvCfg",
-        "rsl_rl_cfg_entry_point": f"{agents.__name__}.atom02_fight_agent_cfg:Atom02FightPPORunnerCfg",
-    },
-)
